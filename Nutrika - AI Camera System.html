@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)file:///C:/Users/use/Desktop/amelia/websites/index3.htm -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrika - AI Camera System</title>
+    <link rel="stylesheet" href="./Nutrika - AI Camera System_files/all.min.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #222;
+            padding: 50px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            letter-spacing: 3px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        ol, ul {
+            margin: 0;
+            padding: 0 0 0 40px;
+            list-style-position: inside;
+        }
+
+        ol li, ul li {
+            margin-bottom: 10px;
+        }
+
+        pre {
+            background-color: #111;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        pre code {
+            display: block;
+            white-space: pre;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .keyword {color: #0074D9;}
+        .comment {color: #808080;}
+        .string {color: #00A1F1;}
+        .error {color: #A00000;}
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Nutrika.</h1>
+    <h3>AI Camera System</h3>
+</header>
+
+<div>
+    <h3>Prerequisites:</h3>
+    <ol>
+        <li><strong>Hardware Setup:</strong> Ensure you have a robot with a camera that can be controlled programmatically.</li>
+        <li><strong>Python Installation:</strong> Make sure you have Python installed on your system.</li>
+    </ol>
+
+    <h3>Required Python Libraries:</h3>
+    <ul>
+        <li><strong>OpenCV:</strong> For accessing and processing camera input.</li>
+        <li><strong>TensorFlow/Keras:</strong> For AI-related tasks like object detection or classification.</li>
+    </ul>
+
+    <h3>Sample Python Code Outline:</h3>
+    <pre>        <code>
+<span class="keyword">import</span> cv2
+
+<span class="comment"># Initialize the camera (assuming camera is available at index 0)</span>
+cap = cv2.VideoCapture(0)
+
+<span class="comment"># Check if the camera is opened correctly</span>
+<span class="keyword">if</span> <span class="keyword">not</span> cap.isOpened():
+    <span class="keyword">print</span>("Error: Could not open camera.")
+    <span class="keyword">exit</span>()
+
+<span class="comment"># Main loop to capture frames from the camera</span>
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    <span class="comment"># Capture frame-by-frame</span>
+    ret, frame = cap.read()
+    
+    <span class="comment"># Display the resulting frame</span>
+    cv2.imshow('<span class="string">Camera Feed</span>', frame)
+    
+    <span class="comment"># Exit on pressing 'q' key</span>
+    <span class="keyword">if</span> cv2.waitKey(1) &amp; 0xFF == ord('<span class="error">q</span>'):
+        <span class="keyword">break</span>
+
+<span class="comment"># Release the camera and close all windows</span>
+cap.release()
+cv2.destroyAllWindows()
+        </code>
+    </pre>
+
+    <h3>Integrating AI (Object Detection Example using TensorFlow/Keras):</h3>
+
+    <pre>        <code>
+<span class="keyword">import</span> cv2
+<span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf
+
+<span class="comment"># Load a pre-trained TensorFlow model for object detection (e.g., TensorFlow's COCO SSD model)</span>
+model = tf.keras.applications.MobileNetV2(weights='<span class="string">imagenet</span>')
+
+<span class="comment"># Initialize the camera (assuming camera is available at index 0)</span>
+cap = cv2.VideoCapture(0)
+
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    ret, frame = cap.read()
+
+    <span class="comment"># Preprocess the frame for the model</span>
+    resized_frame = cv2.resize(frame, (224, 224))
+    input_data = tf.keras.applications.mobilenet_v2.preprocess_input(resized_frame)
+
+    <span class="comment"># Perform inference using the model</span>
+    predictions = model.predict(tf.expand_dims(input_data, axis=0))
+
+    <span class="comment"># Get the class label of the most probable object</span>
+    decoded_predictions = tf.keras.applications.mobilenet_v2.decode_predictions(predictions, top=1)[0]
+    object_name = decoded_predictions[0][1]
+    
+    <span class="comment"># Display the object name on the frame</span>
+    cv2.putText(frame, object_name, (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+    <span class="comment"># Display the resulting frame</span>
+    cv2.imshow('<span class="string">Object Detection</span>', frame)
+
+    <span class="comment"># Exit on pressing 'q' key</span>
+    <span class="keyword">if</span> cv2.waitKey(1) &amp; 0xFF == ord('<span class="error">q</span>'):
+        <span class="keyword">break</span>
+
+<span class="comment"># Release the camera and close all windows</span>
+cap.release()
+cv2.destroyAllWindows()
+ <img src="./Nutrika - AI Camera System_files/python 1.png" style="width:40%">
+ <img src="./Nutrika - AI Camera System_files/python 1.5.png" style="width:40%">
+ <img src="./Nutrika - AI Camera System_files/python 2.png" style="width:40%">
+ <img src="./Nutrika - AI Camera System_files/python 3.png" style="width:40%">
+
+        </code>
+    </pre>
+
+    <h3>Notes:</h3>
+    <ul>
+        <li>Replace <code>model</code> in the AI example with a suitable model depending on your application (e.g., custom-trained model for specific tasks).</li>
+        <li>The code provided is a basic starting point. For a complete AI-driven camera-robot system, you'll need to integrate more complex logic, such as robot control based on AI predictions.</li>
+        <li>Ensure your hardware setup (robot, camera) is compatible and properly configured to work with Python and the required libraries.</li>
+    </ul>
+</div>
+
+
+
+
+
+</body></html>
